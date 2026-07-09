@@ -3,7 +3,6 @@
 import {
   ArrowRight,
   BarChart3,
-  Bell,
   CheckSquare,
   ChevronRight,
   Circle,
@@ -12,13 +11,11 @@ import {
   Home,
   Lock,
   LogOut,
-  Mail,
   Menu,
   MoreHorizontal,
   Plus,
   Search,
   Settings,
-  SlidersHorizontal,
   Upload,
   User,
 } from "lucide-react";
@@ -47,6 +44,16 @@ type ScreenDefinition = {
   number: string;
   name: string;
   purpose: string;
+};
+
+type InputMethod = "upload" | "paste" | "import" | "manual";
+
+type PrototypeState = {
+  inputMethod: InputMethod | null;
+  hasTranscriptFile: boolean;
+  transcriptText: string;
+  extractedFields: Record<string, string>;
+  guardMessage: string | null;
 };
 
 const packagePages: Array<{ id: PackagePage; label: string }> = [
@@ -98,15 +105,86 @@ const extractionSteps = [
 ];
 const criteria = ["Cost", "Implementation effort", "Strategic alignment", "Risk level", "Stakeholder impact"];
 const options = ["Option A", "Option B", "Option C"];
+const initialExtractedFields = Object.fromEntries(
+  extractionFields.map((field) => [field, `Editable ${field.toLowerCase()} extracted by AI`]),
+) as Record<string, string>;
+
+const initialPrototypeState: PrototypeState = {
+  inputMethod: null,
+  hasTranscriptFile: false,
+  transcriptText: "",
+  extractedFields: initialExtractedFields,
+  guardMessage: null,
+};
+
+function validateStep(screen: ScreenId, state: PrototypeState): string | null {
+  if (screen === "newDecision" && !state.inputMethod) {
+    return "Choose an input method before continuing.";
+  }
+
+  if (screen === "uploadTranscript" && !state.hasTranscriptFile && state.transcriptText.trim().length === 0) {
+    return "Upload a transcript file or paste transcript text before AI extraction.";
+  }
+
+  if (screen === "reviewExtraction") {
+    const missingField = extractionFields.find((field) => state.extractedFields[field].trim().length === 0);
+    if (missingField) {
+      return `Complete the ${missingField.toLowerCase()} field before continuing.`;
+    }
+  }
+
+  return null;
+}
+
+function getHighestReachablePrototypeIndex(state: PrototypeState) {
+  for (let index = 0; index < prototypeOrder.length; index += 1) {
+    if (validateStep(prototypeOrder[index], state)) {
+      return index;
+    }
+  }
+
+  return prototypeOrder.length - 1;
+}
 
 export default function DecisionFlowLowFidelityPrototype() {
   const [activePage, setActivePage] = React.useState<PackagePage>("cover");
   const [activeScreen, setActiveScreen] = React.useState<ScreenId>("dashboard");
+  const [prototypeState, setPrototypeState] = React.useState<PrototypeState>(initialPrototypeState);
 
   function goNext() {
     const currentIndex = prototypeOrder.indexOf(activeScreen);
+    const blocker = validateStep(activeScreen, prototypeState);
+    if (blocker) {
+      setPrototypeState((current) => ({ ...current, guardMessage: blocker }));
+      return;
+    }
+
     const next = prototypeOrder[Math.min(currentIndex + 1, prototypeOrder.length - 1)];
+    setPrototypeState((current) => ({ ...current, guardMessage: null }));
     setActiveScreen(next);
+  }
+
+  function goToPrototypeScreen(screen: ScreenId) {
+    const targetIndex = prototypeOrder.indexOf(screen);
+    if (targetIndex === -1) {
+      setPrototypeState((current) => ({ ...current, guardMessage: null }));
+      setActiveScreen(screen);
+      return;
+    }
+
+    const highestReachableIndex = getHighestReachablePrototypeIndex(prototypeState);
+    if (targetIndex > highestReachableIndex) {
+      const blocker = validateStep(prototypeOrder[highestReachableIndex], prototypeState);
+      setPrototypeState((current) => ({
+        ...current,
+        guardMessage: blocker ?? "Complete the current required action before jumping ahead.",
+      }));
+      setActiveScreen(prototypeOrder[highestReachableIndex]);
+      return;
+    }
+
+    setPrototypeState((current) => ({ ...current, guardMessage: null }));
+    setActiveScreen(screen);
   }
 
   function goToPrototype(screen: ScreenId) {
@@ -148,7 +226,13 @@ export default function DecisionFlowLowFidelityPrototype() {
         {activePage === "wireframes" && <WireframesPage goToPrototype={goToPrototype} />}
         {activePage === "components" && <ComponentsPage />}
         {activePage === "prototype" && (
-          <PrototypePage activeScreen={activeScreen} setActiveScreen={setActiveScreen} goNext={goNext} />
+          <PrototypePage
+            activeScreen={activeScreen}
+            setActiveScreen={goToPrototypeScreen}
+            goNext={goNext}
+            prototypeState={prototypeState}
+            setPrototypeState={setPrototypeState}
+          />
         )}
       </section>
     </main>
@@ -321,13 +405,18 @@ function PrototypePage({
   activeScreen,
   setActiveScreen,
   goNext,
+  prototypeState,
+  setPrototypeState,
 }: {
   activeScreen: ScreenId;
   setActiveScreen: (screen: ScreenId) => void;
   goNext: () => void;
+  prototypeState: PrototypeState;
+  setPrototypeState: React.Dispatch<React.SetStateAction<PrototypeState>>;
 }) {
   const definition = screens.find((screen) => screen.id === activeScreen) ?? screens[0];
   const nextLabel = activeScreen === "library" ? "Flow complete" : "Continue";
+  const highestReachableIndex = getHighestReachablePrototypeIndex(prototypeState);
 
   return (
     <WireSection title="05 Prototype" subtitle="Clickable desktop MVP flow for usability validation">
@@ -340,21 +429,36 @@ function PrototypePage({
                 key={screen.id}
                 className={`w-full border p-3 text-left text-sm ${
                   activeScreen === screen.id ? "border-black bg-gray-200 font-semibold" : "border-gray-400 bg-white"
+                } ${
+                  prototypeOrder.indexOf(screen.id) > highestReachableIndex ? "text-gray-500" : ""
                 }`}
                 onClick={() => setActiveScreen(screen.id)}
               >
-                {screen.number} {screen.name}
+                <span className="flex items-center justify-between gap-2">
+                  <span>{screen.number} {screen.name}</span>
+                  {prototypeOrder.indexOf(screen.id) > highestReachableIndex && <Lock className="h-3.5 w-3.5 shrink-0" />}
+                </span>
               </button>
             ))}
           </div>
         </aside>
         <div>
           <ScreenFrame screen={definition}>
-            <ScreenRenderer screen={activeScreen} onNext={goNext} />
+            <ScreenRenderer
+              screen={activeScreen}
+              onNext={goNext}
+              prototypeState={prototypeState}
+              setPrototypeState={setPrototypeState}
+            />
           </ScreenFrame>
+          {prototypeState.guardMessage && (
+            <div className="mt-4 border border-black bg-gray-100 p-4 text-sm font-semibold" role="status">
+              {prototypeState.guardMessage}
+            </div>
+          )}
           <div className="mt-4 flex items-center justify-between border border-gray-400 p-4">
             <p className="text-sm">
-              Prototype interaction: primary CTA advances through the MVP path. Secondary screens are available from the left list.
+              Prototype interaction: required actions must be completed before the next step becomes available.
             </p>
             <WireButton onClick={goNext} disabled={activeScreen === "library"}>
               {nextLabel}
@@ -387,8 +491,20 @@ function ScreenFrame({
   );
 }
 
-function ScreenRenderer({ screen, compact = false, onNext }: { screen: ScreenId; compact?: boolean; onNext?: () => void }) {
-  const props = { compact, onNext };
+function ScreenRenderer({
+  screen,
+  compact = false,
+  onNext,
+  prototypeState,
+  setPrototypeState,
+}: {
+  screen: ScreenId;
+  compact?: boolean;
+  onNext?: () => void;
+  prototypeState?: PrototypeState;
+  setPrototypeState?: React.Dispatch<React.SetStateAction<PrototypeState>>;
+}) {
+  const props = { compact, onNext, prototypeState, setPrototypeState };
   const map: Record<ScreenId, React.ReactNode> = {
     landing: <LandingWire {...props} />,
     login: <LoginWire {...props} />,
@@ -464,23 +580,39 @@ function DashboardWire({ compact, onNext }: WireProps) {
   );
 }
 
-function NewDecisionWire({ onNext }: WireProps) {
+function NewDecisionWire({ onNext, prototypeState, setPrototypeState }: WireProps) {
+  const selectedMethod = prototypeState?.inputMethod ?? null;
+
+  function chooseMethod(method: InputMethod) {
+    setPrototypeState?.((current) => ({
+      ...current,
+      inputMethod: method,
+      guardMessage: null,
+    }));
+  }
+
   return (
     <AppLayout active="New Decision">
       <TopNav title="New Decision" />
       <WirePanel title="Choose input method" className="mt-5">
         <div className="grid grid-cols-4 gap-4">
           {([
-            ["Upload Meeting Transcript", Upload],
-            ["Paste Meeting Notes", FileText],
-            ["Import PDF/DOCX", FolderOpen],
-            ["Manual Entry", Menu],
-          ] satisfies Array<[string, LucideIcon]>).map(([label, Component]) => {
+            ["Upload Meeting Transcript", Upload, "upload"],
+            ["Paste Meeting Notes", FileText, "paste"],
+            ["Import PDF/DOCX", FolderOpen, "import"],
+            ["Manual Entry", Menu, "manual"],
+          ] satisfies Array<[string, LucideIcon, InputMethod]>).map(([label, Component, method]) => {
             return (
-              <button key={label} className="h-44 border border-gray-500 p-5 text-left" onClick={onNext}>
+              <button
+                key={label}
+                className={`h-44 border p-5 text-left ${
+                  selectedMethod === method ? "border-black bg-gray-200" : "border-gray-500 bg-white"
+                }`}
+                onClick={() => chooseMethod(method)}
+              >
                 <Component className="h-7 w-7" />
                 <p className="mt-8 font-semibold">{label}</p>
-                <p className="mt-2 text-sm text-gray-600">Begin with this source</p>
+                <p className="mt-2 text-sm text-gray-600">{selectedMethod === method ? "Selected" : "Begin with this source"}</p>
               </button>
             );
           })}
@@ -490,20 +622,49 @@ function NewDecisionWire({ onNext }: WireProps) {
   );
 }
 
-function UploadTranscriptWire({ onNext }: WireProps) {
+function UploadTranscriptWire({ onNext, prototypeState, setPrototypeState }: WireProps) {
+  const hasTranscriptFile = prototypeState?.hasTranscriptFile ?? false;
+  const transcriptText = prototypeState?.transcriptText ?? "";
+  const hasRequiredInput = hasTranscriptFile || transcriptText.trim().length > 0;
+
+  function markFileUploaded() {
+    setPrototypeState?.((current) => ({
+      ...current,
+      hasTranscriptFile: true,
+      guardMessage: null,
+    }));
+  }
+
+  function updateTranscriptText(value: string) {
+    setPrototypeState?.((current) => ({
+      ...current,
+      transcriptText: value,
+      guardMessage: value.trim().length > 0 ? null : current.guardMessage,
+    }));
+  }
+
   return (
     <AppLayout active="New Decision">
       <TopNav title="Upload Transcript" />
       <div className="mt-5 grid grid-cols-[1fr_360px] gap-5">
         <WirePanel title="Meeting transcript">
-          <UploadArea />
+          <UploadArea uploaded={hasTranscriptFile} onBrowse={markFileUploaded} />
           <div className="mt-4 flex items-center justify-between">
-            <p className="text-sm text-gray-600">Supported file types: TXT, DOCX, PDF</p>
-            <WireButton onClick={onNext}>Upload</WireButton>
+            <p className="text-sm text-gray-600">
+              {hasTranscriptFile ? "Selected file: meeting-transcript.txt" : "Supported file types: TXT, DOCX, PDF"}
+            </p>
+            <WireButton onClick={onNext} disabled={!hasRequiredInput}>Upload</WireButton>
           </div>
+          {!hasRequiredInput && <p className="mt-3 text-sm font-semibold">Required: browse for a file or paste transcript text.</p>}
         </WirePanel>
         <WirePanel title="Paste transcript option">
-          <WireInput label="Transcript text" placeholder="Paste raw transcript..." textarea />
+          <WireInput
+            label="Transcript text"
+            placeholder="Paste raw transcript..."
+            textarea
+            value={transcriptText}
+            onChange={(event) => updateTranscriptText(event.target.value)}
+          />
         </WirePanel>
       </div>
     </AppLayout>
@@ -530,14 +691,33 @@ function AIExtractionWire({ onNext }: WireProps) {
   );
 }
 
-function ReviewExtractionWire({ onNext }: WireProps) {
+function ReviewExtractionWire({ onNext, prototypeState, setPrototypeState }: WireProps) {
+  const extractedFields = prototypeState?.extractedFields ?? initialExtractedFields;
+
+  function updateExtractedField(field: string, value: string) {
+    setPrototypeState?.((current) => ({
+      ...current,
+      extractedFields: {
+        ...current.extractedFields,
+        [field]: value,
+      },
+      guardMessage: value.trim().length > 0 ? null : current.guardMessage,
+    }));
+  }
+
   return (
     <AppLayout active="Review">
       <TopNav title="Review Extracted Information" />
       <div className="mt-5 grid grid-cols-2 gap-4">
         {extractionFields.map((field) => (
           <WirePanel key={field} title={field}>
-            <WireInput label={`${field} extracted value`} placeholder={`Editable ${field.toLowerCase()}`} textarea={field === "Risks" || field === "Action items"} />
+            <WireInput
+              label={`${field} extracted value`}
+              placeholder={`Editable ${field.toLowerCase()}`}
+              textarea={field === "Risks" || field === "Action items"}
+              value={extractedFields[field]}
+              onChange={(event) => updateExtractedField(field, event.target.value)}
+            />
             <div className="mt-3 flex justify-end"><WireButton variant="secondary">Edit</WireButton></div>
           </WirePanel>
         ))}
@@ -807,14 +987,36 @@ function WireButton({
   );
 }
 
-function WireInput({ label, placeholder, textarea = false }: { label: string; placeholder: string; textarea?: boolean }) {
+function WireInput({
+  label,
+  placeholder,
+  textarea = false,
+  value,
+  onChange,
+}: {
+  label: string;
+  placeholder: string;
+  textarea?: boolean;
+  value?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+}) {
   return (
     <label className="block">
       <span className="text-sm font-semibold">{label}</span>
       {textarea ? (
-        <textarea className="mt-2 min-h-28 w-full border border-gray-500 bg-white p-3 text-sm" placeholder={placeholder} />
+        <textarea
+          className="mt-2 min-h-28 w-full border border-gray-500 bg-white p-3 text-sm"
+          onChange={onChange}
+          placeholder={placeholder}
+          value={value}
+        />
       ) : (
-        <input className="mt-2 h-11 w-full border border-gray-500 bg-white px-3 text-sm" placeholder={placeholder} />
+        <input
+          className="mt-2 h-11 w-full border border-gray-500 bg-white px-3 text-sm"
+          onChange={onChange}
+          placeholder={placeholder}
+          value={value}
+        />
       )}
     </label>
   );
@@ -858,12 +1060,12 @@ function DecisionListItem({ title, status }: { title: string; status: string }) 
   );
 }
 
-function UploadArea() {
+function UploadArea({ uploaded = false, onBrowse }: { uploaded?: boolean; onBrowse?: () => void }) {
   return (
     <WireBox className="h-72 flex-col items-center justify-center gap-4 border-dashed">
       <Upload className="h-10 w-10" />
-      <p className="text-lg font-semibold">Drag & Drop upload area</p>
-      <WireButton variant="secondary">Browse File</WireButton>
+      <p className="text-lg font-semibold">{uploaded ? "meeting-transcript.txt selected" : "Drag & Drop upload area"}</p>
+      <WireButton variant="secondary" onClick={onBrowse}>{uploaded ? "Replace File" : "Browse File"}</WireButton>
     </WireBox>
   );
 }
@@ -979,4 +1181,6 @@ function Line({ short = false }: { short?: boolean }) {
 type WireProps = {
   compact?: boolean;
   onNext?: () => void;
+  prototypeState?: PrototypeState;
+  setPrototypeState?: React.Dispatch<React.SetStateAction<PrototypeState>>;
 };
