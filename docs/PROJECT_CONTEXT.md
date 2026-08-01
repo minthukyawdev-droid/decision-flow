@@ -66,6 +66,9 @@ backend.
 - Discover candidate options when the source contains fewer than two explicit
   alternatives; suggestions require explicit user acceptance before becoming
   reviewed options.
+- Discover candidate criteria when the source contains no explicit evaluation
+  factors; suggestions require explicit user acceptance before becoming
+  reviewed criteria.
 - Weight criteria and generate a recommendation.
 - Store evidence-grounded AI criterion evaluations and separate human scores.
 - Compare options, select an explicit final option, and finalize an immutable
@@ -106,6 +109,8 @@ backend.
 - AI evidence is accepted only when it can be matched to stored transcript
   content.
 - AI-discovered options remain suggestions until the user explicitly accepts
+  them into reviewed decision information.
+- AI-discovered criteria remain suggestions until the user explicitly accepts
   them into reviewed decision information.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
