@@ -71,6 +71,9 @@ backend.
   reviewed criteria.
 - Weight criteria and generate a recommendation.
 - Store evidence-grounded AI criterion evaluations and separate human scores.
+- Identify missing option–criterion evidence, prioritize gaps by decision weight,
+  and generate a copyable evidence-collection checklist without fabricating AI
+  scores.
 - Compare options, select an explicit final option, and finalize an immutable
   snapshot.
 - Resume durable work from the backend while retaining a local recovery draft.
