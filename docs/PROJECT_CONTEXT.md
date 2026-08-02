@@ -53,6 +53,9 @@ backend.
 - Email verification is required before login and authenticated API use.
 - Verification resend and registration attempts are rate limited.
 - JWT bearer tokens authenticate API requests.
+- Every account owns a personal workspace, has an explicit workspace membership,
+  and points to an active workspace. Existing users and decisions are migrated
+  into that boundary automatically.
 
 ### Decision workflow
 
@@ -110,6 +113,8 @@ backend.
 - Provider keys and secrets never cross into frontend responses.
 - Finalization requires an explicit selected option.
 - Finalized content is immutable.
+- Authenticated decision ownership is additionally constrained to the user's
+  active workspace; workspace membership alone does not broaden access yet.
 - Public reports exclude sensitive source and reviewer information.
 - Secure invitation and share tokens are opaque and revocable or expiring.
 - AI evidence is accepted only when it can be matched to stored transcript
