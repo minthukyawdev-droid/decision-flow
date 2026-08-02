@@ -75,6 +75,8 @@ backend.
 - Identify missing option–criterion evidence, prioritize gaps by decision weight,
   and generate a copyable evidence-collection checklist without fabricating AI
   scores.
+- Test recommendation robustness with deterministic weight sensitivity,
+  scenario outcomes, source-specific coverage gates, and tipping-point analysis.
 - Compare options, select an explicit final option, and finalize an immutable
   snapshot.
 - Resume durable work from the backend while retaining a local recovery draft.
@@ -116,6 +118,8 @@ backend.
   them into reviewed decision information.
 - AI-discovered criteria remain suggestions until the user explicitly accepts
   them into reviewed decision information.
+- Robustness simulations never replace saved weights, scores, or the recorded AI
+  recommendation, and do not run on incomplete score matrices.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification
