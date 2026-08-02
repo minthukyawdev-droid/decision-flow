@@ -68,7 +68,8 @@ backend.
   reviewed options.
 - Discover candidate criteria when the source contains no explicit evaluation
   factors; suggestions require explicit user acceptance before becoming
-  reviewed criteria.
+  reviewed criteria. Reviewers can accept candidates individually or together,
+  and retry extraction when neither explicit nor candidate criteria are found.
 - Weight criteria and generate a recommendation.
 - Store evidence-grounded AI criterion evaluations and separate human scores.
 - Identify missing option–criterion evidence, prioritize gaps by decision weight,
