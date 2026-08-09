@@ -1,6 +1,6 @@
 # DecisionFlow project context
 
-Last verified against the working tree: 2026-08-02.
+Last verified against the working tree: 2026-08-09.
 
 ## Product
 
@@ -60,6 +60,8 @@ backend.
 ### Decision workflow
 
 - Create, list, retrieve, update, archive, and delete decisions.
+- Create, rename, archive, and restore workspace projects; assign decisions to a
+  project or keep them unassigned, and filter the decision library by project.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
@@ -115,6 +117,10 @@ backend.
 - Finalized content is immutable.
 - Authenticated decision ownership is additionally constrained to the user's
   active workspace; workspace membership alone does not broaden access yet.
+- Projects are workspace-owned. Archived projects retain their decisions but
+  cannot receive new assignments until restored.
+- Project assignment is organizational metadata outside the immutable finalized
+  snapshot and can be changed without rewriting finalized decision content.
 - Public reports exclude sensitive source and reviewer information.
 - Secure invitation and share tokens are opaque and revocable or expiring.
 - AI evidence is accepted only when it can be matched to stored transcript
