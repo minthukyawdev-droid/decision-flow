@@ -56,6 +56,9 @@ backend.
 - Every account owns a personal workspace, has an explicit workspace membership,
   and points to an active workspace. Existing users and decisions are migrated
   into that boundary automatically.
+- Owners and administrators can invite exact verified email addresses into the
+  active workspace. Members can switch workspaces; owner, admin, and member roles
+  collaborate on workspace decisions, while viewers have read-only access.
 
 ### Decision workflow
 
@@ -117,14 +120,17 @@ backend.
 - Provider keys and secrets never cross into frontend responses.
 - Finalization requires an explicit selected option.
 - Finalized content is immutable.
-- Authenticated decision ownership is additionally constrained to the user's
-  active workspace; workspace membership alone does not broaden access yet.
+- Authenticated decision access is constrained to the user's active workspace.
+  Owner, admin, and member roles can mutate workspace content; viewers are
+  read-only. Access is workspace-wide until project-specific grants are added.
 - Projects are workspace-owned. Archived projects retain their decisions but
   cannot receive new assignments until restored.
 - Project assignment is organizational metadata outside the immutable finalized
   snapshot and can be changed without rewriting finalized decision content.
 - Public reports exclude sensitive source and reviewer information.
 - Secure invitation and share tokens are opaque and revocable or expiring.
+- Workspace invitation tokens are hashed, email-bound, expiring, and expose only
+  a masked invited address in their public preview.
 - AI evidence is accepted only when it can be matched to stored transcript
   content.
 - AI-discovered options remain suggestions until the user explicitly accepts
