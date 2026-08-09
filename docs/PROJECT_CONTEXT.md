@@ -59,6 +59,8 @@ backend.
 - Owners and administrators can invite exact verified email addresses into the
   active workspace. Members can switch workspaces; owner, admin, and member roles
   collaborate on workspace decisions, while viewers have read-only access.
+- Team workspace owners can explicitly transfer ownership to another active member;
+  the previous owner becomes an administrator in the same transaction.
 
 ### Decision workflow
 
@@ -67,6 +69,9 @@ backend.
   projects, review project-level decision counts, and open assigned decisions.
   New and existing decisions can be assigned to a project or kept unassigned,
   and the decision library can be filtered by project.
+- Projects can be workspace-wide or restricted to selected workspace members.
+  Restricted project decisions inherit the project visibility boundary, while
+  workspace viewers remain read-only even when selected.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
@@ -122,7 +127,8 @@ backend.
 - Finalized content is immutable.
 - Authenticated decision access is constrained to the user's active workspace.
   Owner, admin, and member roles can mutate workspace content; viewers are
-  read-only. Access is workspace-wide until project-specific grants are added.
+  read-only. Restricted projects further constrain project and assigned-decision
+  visibility to selected members; owners and administrators always retain access.
 - Projects are workspace-owned. Archived projects retain their decisions but
   cannot receive new assignments until restored.
 - Project assignment is organizational metadata outside the immutable finalized
@@ -131,6 +137,8 @@ backend.
 - Secure invitation and share tokens are opaque and revocable or expiring.
 - Workspace invitation tokens are hashed, email-bound, expiring, and expose only
   a masked invited address in their public preview.
+- Team ownership transfer is explicit and atomic, cannot target the current owner,
+  and cannot be used for personal workspaces.
 - AI evidence is accepted only when it can be matched to stored transcript
   content.
 - AI-discovered options remain suggestions until the user explicitly accepts
