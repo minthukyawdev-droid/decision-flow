@@ -62,7 +62,8 @@ backend.
 - Team workspace owners can explicitly transfer ownership to another active member;
   the previous owner becomes an administrator in the same transaction.
 - Members can follow a workspace activity feed for important team, project-access,
-  ownership, and decision lifecycle changes.
+  ownership, and decision lifecycle changes. Per-workspace unread counts power the
+  header notification badge, unread filtering, and an explicit mark-all-read action.
 
 ### Decision workflow
 
@@ -142,6 +143,8 @@ backend.
 - Workspace activity is isolated to the active workspace. Events associated with
   restricted projects inherit that project's visibility boundary and expose actor
   display names without actor email addresses.
+- Activity read state is per user and workspace. Own events do not count as unread,
+  and membership removal clears that workspace's saved read position.
 - Team ownership transfer is explicit and atomic, cannot target the current owner,
   and cannot be used for personal workspaces.
 - AI evidence is accepted only when it can be matched to stored transcript
