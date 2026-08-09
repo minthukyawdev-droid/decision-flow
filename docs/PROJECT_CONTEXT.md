@@ -61,6 +61,8 @@ backend.
   collaborate on workspace decisions, while viewers have read-only access.
 - Team workspace owners can explicitly transfer ownership to another active member;
   the previous owner becomes an administrator in the same transaction.
+- Members can follow a workspace activity feed for important team, project-access,
+  ownership, and decision lifecycle changes.
 
 ### Decision workflow
 
@@ -137,6 +139,9 @@ backend.
 - Secure invitation and share tokens are opaque and revocable or expiring.
 - Workspace invitation tokens are hashed, email-bound, expiring, and expose only
   a masked invited address in their public preview.
+- Workspace activity is isolated to the active workspace. Events associated with
+  restricted projects inherit that project's visibility boundary and expose actor
+  display names without actor email addresses.
 - Team ownership transfer is explicit and atomic, cannot target the current owner,
   and cannot be used for personal workspaces.
 - AI evidence is accepted only when it can be matched to stored transcript
