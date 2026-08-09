@@ -60,8 +60,10 @@ backend.
 ### Decision workflow
 
 - Create, list, retrieve, update, archive, and delete decisions.
-- Create, rename, archive, and restore workspace projects; assign decisions to a
-  project or keep them unassigned, and filter the decision library by project.
+- Use the frontend Projects workspace to create, rename, archive, and restore
+  projects, review project-level decision counts, and open assigned decisions.
+  New and existing decisions can be assigned to a project or kept unassigned,
+  and the decision library can be filtered by project.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
