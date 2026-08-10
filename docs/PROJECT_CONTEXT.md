@@ -105,6 +105,9 @@ backend.
   metric results, supporting evidence, assumption findings, lessons learned, and
   follow-up notes. Starting an assessment snapshots its metric and assumption
   baseline so later plan edits cannot silently change the evaluation target.
+- Start or resume those drafts directly from each due or upcoming Outcomes card.
+  The dashboard counts saved drafts, workspace editors can update the structured
+  assessment form, and viewers can inspect the same evidence in read-only mode.
 - Resume durable work from the backend while retaining a local recovery draft.
 
 ### Reporting, sharing, and approval
