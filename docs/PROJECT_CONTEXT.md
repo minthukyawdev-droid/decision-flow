@@ -108,6 +108,10 @@ backend.
 - Start or resume those drafts directly from each due or upcoming Outcomes card.
   The dashboard counts saved drafts, workspace editors can update the structured
   assessment form, and viewers can inspect the same evidence in read-only mode.
+- Complete a ready assessment through an explicit irreversible action. Completion
+  requires assessed metrics and assumptions with evidence, records the actor and
+  time, creates a versioned snapshot, and moves the record into a read-only
+  Completed reviews section. Repeated completion requests are safe retries.
 - Resume durable work from the backend while retaining a local recovery draft.
 
 ### Reporting, sharing, and approval
@@ -150,9 +154,9 @@ backend.
 - Outcome-review plans are mutable follow-up records outside the finalized snapshot.
   They inherit decision and restricted-project access; editing a plan never mutates
   the finalized decision, and removing its workspace owner leaves it unassigned.
-- Outcome-assessment drafts inherit the same decision and project access. Their
-  metric and assumption baselines are fixed on first save, while their observed
-  results remain editable until a later explicit completion lifecycle is applied.
+- Outcome assessments inherit the same decision and project access. Their metric
+  and assumption baselines are fixed on first save. Draft results remain editable;
+  completed assessments and their versioned completion snapshots are immutable.
 - Public reports exclude sensitive source and reviewer information.
 - Secure invitation and share tokens are opaque and revocable or expiring.
 - Workspace invitation tokens are hashed, email-bound, expiring, and expose only
