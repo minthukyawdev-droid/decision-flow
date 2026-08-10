@@ -112,6 +112,10 @@ backend.
   requires assessed metrics and assumptions with evidence, records the actor and
   time, creates a versioned snapshot, and moves the record into a read-only
   Completed reviews section. Repeated completion requests are safe retries.
+- Use access-aware outcome portfolio intelligence to track review-plan coverage,
+  assessment completion, follow-up rate, median review cycle time, observed-result
+  distribution, and recent recorded lessons. These are deterministic aggregates of
+  visible completed reviews, not an invented AI decision-quality score.
 - Resume durable work from the backend while retaining a local recovery draft.
 
 ### Reporting, sharing, and approval
