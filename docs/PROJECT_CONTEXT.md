@@ -1,6 +1,6 @@
 # DecisionFlow project context
 
-Last verified against the working tree: 2026-08-09.
+Last verified against the working tree: 2026-08-10.
 
 ## Product
 
@@ -97,6 +97,10 @@ backend.
   scenario outcomes, source-specific coverage gates, and tipping-point analysis.
 - Compare options, select an explicit final option, and finalize an immutable
   snapshot.
+- Schedule an outcome review for a finalized decision with an expected outcome,
+  measurable success signals, an accountable workspace member, assumptions, revisit triggers,
+  and a review date. The Outcomes workspace separates due and upcoming reviews
+  and highlights finalized decisions that still need a plan.
 - Resume durable work from the backend while retaining a local recovery draft.
 
 ### Reporting, sharing, and approval
@@ -136,6 +140,9 @@ backend.
   cannot receive new assignments until restored.
 - Project assignment is organizational metadata outside the immutable finalized
   snapshot and can be changed without rewriting finalized decision content.
+- Outcome-review plans are mutable follow-up records outside the finalized snapshot.
+  They inherit decision and restricted-project access; editing a plan never mutates
+  the finalized decision, and removing its workspace owner leaves it unassigned.
 - Public reports exclude sensitive source and reviewer information.
 - Secure invitation and share tokens are opaque and revocable or expiring.
 - Workspace invitation tokens are hashed, email-bound, expiring, and expose only
