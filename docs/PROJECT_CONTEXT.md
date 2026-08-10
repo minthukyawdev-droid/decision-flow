@@ -101,6 +101,10 @@ backend.
   measurable success signals, an accountable workspace member, assumptions, revisit triggers,
   and a review date. The Outcomes workspace separates due and upcoming reviews
   and highlights finalized decisions that still need a plan.
+- Persist editable outcome-assessment drafts with an overall result, observed
+  metric results, supporting evidence, assumption findings, lessons learned, and
+  follow-up notes. Starting an assessment snapshots its metric and assumption
+  baseline so later plan edits cannot silently change the evaluation target.
 - Resume durable work from the backend while retaining a local recovery draft.
 
 ### Reporting, sharing, and approval
@@ -143,6 +147,9 @@ backend.
 - Outcome-review plans are mutable follow-up records outside the finalized snapshot.
   They inherit decision and restricted-project access; editing a plan never mutates
   the finalized decision, and removing its workspace owner leaves it unassigned.
+- Outcome-assessment drafts inherit the same decision and project access. Their
+  metric and assumption baselines are fixed on first save, while their observed
+  results remain editable until a later explicit completion lifecycle is applied.
 - Public reports exclude sensitive source and reviewer information.
 - Secure invitation and share tokens are opaque and revocable or expiring.
 - Workspace invitation tokens are hashed, email-bound, expiring, and expose only
