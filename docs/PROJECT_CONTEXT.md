@@ -1,6 +1,6 @@
 # DecisionFlow project context
 
-Last verified against the working tree: 2026-08-10.
+Last verified against the working tree: 2026-08-12.
 
 ## Product
 
@@ -77,6 +77,10 @@ backend.
   reviewed options, and project. Every precedent shows its match reasons,
   selected option, owner, project, and recorded outcome; weak matches and raw
   transcript content are excluded.
+- Summarize repeated choices, recurring criteria, observed outcome patterns, and
+  recorded lessons across those precedents. Every historical insight links to its
+  supporting decision record; outcome claims use only immutable completed review
+  snapshots, never draft assessments.
 - Use the frontend Projects workspace to create, rename, archive, and restore
   projects, review project-level decision counts, and open assigned decisions.
   New and existing decisions can be assigned to a project or kept unassigned,
@@ -191,6 +195,9 @@ backend.
   recommendation, and do not run on incomplete score matrices.
 - Similarity percentages are reproducible retrieval signals, not AI recommendations
   or decision-quality scores, and candidates inherit normal project visibility.
+- Precedent intelligence is deterministic and citation-backed. It may summarize
+  finalized decision fields and immutable completed outcome reviews, but never raw
+  transcript content, draft outcome assessments, or unsupported causal claims.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification

@@ -17,6 +17,11 @@ deterministic similarity percentage from normalized overlap in decision topic te
 reviewed criteria, reviewed options, and project assignment. Omit weak matches and
 return explicit match reasons with the historical selected option and outcome
 status. Do not use raw transcript text as matching input or expose it in results.
+Build precedent intelligence from the same authorized, ranked result set. Repeated
+choices and criteria may cite finalized decision snapshots; observed outcome
+patterns and lessons may cite only immutable completed outcome-assessment
+snapshots. Every summarized statement must return its supporting decision
+citations, and draft outcome assessments must not influence the brief.
 
 ## Alternatives considered
 
@@ -34,7 +39,8 @@ status. Do not use raw transcript text as matching input or expose it in results
 
 Matches are fast, testable, provider-independent, and explainable. Restricted
 project access remains authoritative because candidate retrieval uses the normal
-decision visibility boundary. The token-overlap approach may miss semantically
-related decisions that use different language; a future embedding implementation
-can replace ranking while preserving the endpoint, authorization rules, threshold,
-and explanation contract.
+decision visibility boundary. Historical summaries remain auditable and cannot
+mistake unfinished outcome notes for established learning. The token-overlap
+approach may miss semantically related decisions that use different language; a
+future embedding implementation can replace ranking while preserving the endpoint,
+authorization rules, threshold, citation, and explanation contracts.
