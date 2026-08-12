@@ -72,6 +72,11 @@ backend.
   options, owner names, and project names. Filter by lifecycle status, project,
   decision owner, recorded outcome, and inclusive updated-date range; filter state
   is reflected in the URL for reusable library views.
+- Surface similar finalized decisions inside the decision workspace using an
+  access-aware, deterministic match across topic terms, reviewed criteria,
+  reviewed options, and project. Every precedent shows its match reasons,
+  selected option, owner, project, and recorded outcome; weak matches and raw
+  transcript content are excluded.
 - Use the frontend Projects workspace to create, rename, archive, and restore
   projects, review project-level decision counts, and open assigned decisions.
   New and existing decisions can be assigned to a project or kept unassigned,
@@ -184,6 +189,8 @@ backend.
   them into reviewed decision information.
 - Robustness simulations never replace saved weights, scores, or the recorded AI
   recommendation, and do not run on incomplete score matrices.
+- Similarity percentages are reproducible retrieval signals, not AI recommendations
+  or decision-quality scores, and candidates inherit normal project visibility.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification
