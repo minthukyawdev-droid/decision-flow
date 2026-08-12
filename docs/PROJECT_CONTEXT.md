@@ -68,6 +68,10 @@ backend.
 ### Decision workflow
 
 - Create, list, retrieve, update, archive, and delete decisions.
+- Search the access-authorized decision library across decision text, selected
+  options, owner names, and project names. Filter by lifecycle status, project,
+  decision owner, recorded outcome, and inclusive updated-date range; filter state
+  is reflected in the URL for reusable library views.
 - Use the frontend Projects workspace to create, rename, archive, and restore
   projects, review project-level decision counts, and open assigned decisions.
   New and existing decisions can be assigned to a project or kept unassigned,
