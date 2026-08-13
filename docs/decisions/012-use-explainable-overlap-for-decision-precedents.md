@@ -22,6 +22,13 @@ choices and criteria may cite finalized decision snapshots; observed outcome
 patterns and lessons may cite only immutable completed outcome-assessment
 snapshots. Every summarized statement must return its supporting decision
 citations, and draft outcome assessments must not influence the brief.
+Give each insight a deterministic identity and require an explicit editor action
+before it becomes recommendation context. Persist the accepted statement,
+citations, actor, and time on the target decision; permit removal only before
+finalization and copy the accepted context into the final snapshot. Treat this
+context as reasoning guidance, never as evidence for option-criterion scores.
+Reject attachment or project movement that would propagate restricted-project
+insights beyond their source project's audience.
 
 ## Alternatives considered
 
@@ -44,3 +51,6 @@ mistake unfinished outcome notes for established learning. The token-overlap
 approach may miss semantically related decisions that use different language; a
 future embedding implementation can replace ranking while preserving the endpoint,
 authorization rules, threshold, citation, and explanation contracts.
+Explicit acceptance prevents retrieved history from silently steering a decision,
+while the stored actor, citations, audit event, and final snapshot make its influence
+reviewable. Audience checks trade some cross-project reuse for confidentiality.

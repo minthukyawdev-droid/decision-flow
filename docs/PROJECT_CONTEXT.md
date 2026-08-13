@@ -81,6 +81,10 @@ backend.
   recorded lessons across those precedents. Every historical insight links to its
   supporting decision record; outcome claims use only immutable completed review
   snapshots, never draft assessments.
+- Let editors explicitly apply or remove one of those grounded insights before
+  recommendation. Applied context is audited, informs later AI reasoning without
+  becoming score evidence, and is frozen into the immutable finalization snapshot;
+  no option, criterion, weight, or score is changed automatically.
 - Use the frontend Projects workspace to create, rename, archive, and restore
   projects, review project-level decision counts, and open assigned decisions.
   New and existing decisions can be assigned to a project or kept unassigned,
@@ -198,6 +202,10 @@ backend.
 - Precedent intelligence is deterministic and citation-backed. It may summarize
   finalized decision fields and immutable completed outcome reviews, but never raw
   transcript content, draft outcome assessments, or unsupported causal claims.
+- Historical context requires explicit human acceptance, remains removable until
+  finalization, and cannot be propagated from a restricted project into a broader
+  decision audience. It may guide AI reasoning but cannot support AI evaluation
+  scores, which remain grounded only in the current decision's stored source text.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification
