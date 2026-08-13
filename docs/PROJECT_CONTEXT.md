@@ -91,7 +91,9 @@ backend.
   finalization without changing its immutable snapshot, become read-only when the
   decision is archived, and are excluded from public shared reports. A comment can
   be linked to the overall decision, an option, criterion, risk, or current
-  recommendation and filtered by that saved context.
+  recommendation and filtered by that saved context. Editors can select verified
+  teammates who can access the decision as exact mentions; those teammates receive
+  recipient-only activity notifications without comment text or email addresses.
 - Use the frontend Projects workspace to create, rename, archive, and restore
   projects, review project-level decision counts, and open assigned decisions.
   New and existing decisions can be assigned to a project or kept unassigned,
@@ -191,7 +193,8 @@ backend.
   a masked invited address in their public preview.
 - Workspace activity is isolated to the active workspace. Events associated with
   restricted projects inherit that project's visibility boundary and expose actor
-  display names without actor email addresses.
+  display names without actor email addresses. Recipient-scoped events are visible
+  only to the named user, even when another member is a workspace administrator.
 - Activity read state is per user and workspace. Own events do not count as unread,
   and membership removal clears that workspace's saved read position.
 - Team ownership transfer is explicit and atomic, cannot target the current owner,
@@ -217,7 +220,9 @@ backend.
   collaboration records outside finalized decision content; activity events record
   that discussion occurred without copying private comment text. Linkable targets
   are published and validated by the backend; stale or fabricated field references
-  cannot be attached.
+  cannot be attached. Mention identities are selected from an access-filtered backend
+  candidate list and revalidated when posted, so restricted-project membership cannot
+  be bypassed by a fabricated user ID.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification
