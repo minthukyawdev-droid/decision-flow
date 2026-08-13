@@ -22,6 +22,12 @@ without modifying their snapshot, while archived decisions expose discussion rea
 Record generic add/remove history and workspace activity events, but never copy comment
 bodies into activity metadata, public reports, or finalized snapshots. A later threaded
 discussion feature can extend these records without changing this boundary.
+Allow a comment to target the overall decision, a reviewed option, persisted criterion,
+reviewed or recommendation risk, or the current recommendation. Publish valid targets from
+the backend and require comment creation to use one of those server-issued references. Persist a
+display-label snapshot with the comment so an existing discussion stays understandable if a
+draft field is later renamed; reject stale references for new comments. After finalization,
+derive targets from the immutable snapshot rather than mutable live fields.
 
 ## Alternatives considered
 
@@ -31,6 +37,8 @@ discussion feature can extend these records without changing this boundary.
   follow-up discussion after a choice is recorded.
 - Allow every editor to delete every comment. Rejected because routine moderation should
   be limited to the author and administrative roles.
+- Let the browser construct arbitrary field links. Rejected because it would permit stale or
+  fabricated references and make finalized comment context difficult to audit.
 
 ## Consequences
 
@@ -38,4 +46,5 @@ Teams can collaborate throughout the decision lifecycle without weakening finali
 Comments inherit existing access controls and remain private to authorized members. A
 deleted comment body is not recoverable through the comment API, although the audit and
 activity records retain that a deletion occurred. Archived decisions preserve discussion
-as read-only history.
+as read-only history. Server-issued field targets add one read endpoint and preserve a label
+snapshot, but keep context links deterministic and independently verifiable.

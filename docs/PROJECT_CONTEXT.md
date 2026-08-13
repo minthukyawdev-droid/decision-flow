@@ -89,7 +89,9 @@ backend.
   decision-level comments. Viewers can read but not post; authors and workspace
   administrators can delete comments. Discussions remain available after
   finalization without changing its immutable snapshot, become read-only when the
-  decision is archived, and are excluded from public shared reports.
+  decision is archived, and are excluded from public shared reports. A comment can
+  be linked to the overall decision, an option, criterion, risk, or current
+  recommendation and filtered by that saved context.
 - Use the frontend Projects workspace to create, rename, archive, and restore
   projects, review project-level decision counts, and open assigned decisions.
   New and existing decisions can be assigned to a project or kept unassigned,
@@ -213,7 +215,9 @@ backend.
   scores, which remain grounded only in the current decision's stored source text.
 - Decision comments inherit workspace and restricted-project visibility. They are
   collaboration records outside finalized decision content; activity events record
-  that discussion occurred without copying private comment text.
+  that discussion occurred without copying private comment text. Linkable targets
+  are published and validated by the backend; stale or fabricated field references
+  cannot be attached.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification
