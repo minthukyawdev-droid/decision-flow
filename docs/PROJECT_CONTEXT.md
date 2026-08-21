@@ -105,6 +105,12 @@ backend.
 - Give each user a My Work workspace that combines their visible assigned actions,
   pending approvals, owned outcome reviews, and direct discussion mentions. Filters
   narrow the queue by responsibility type, urgency, project, and action priority.
+- Give leaders an access-aware Decision Portfolio dashboard with total, active,
+  finalized, attention, critical, blocked, and overdue counts. Reusable URL filters
+  narrow the portfolio by search, project, owner, lifecycle stage, operational risk,
+  and updated date. Each decision shows a deterministic health timeline and grounded
+  risk reasons; six-month flow trends, project comparisons, and a sanitized CSV export
+  support executive reporting without inventing an AI decision-quality score.
 - Create recipient-only activity notifications when an action is assigned, due soon,
   or overdue. The hourly production automation uses persisted notification state and
   PostgreSQL row locks to make overlapping or repeated runs idempotent.
@@ -245,6 +251,10 @@ backend.
   content, become read-only with an archived decision, and are removed with the parent
   decision. Assignment and deadline activity is recipient-scoped and never exposes the
   action description.
+- Portfolio summaries inherit the same active-workspace and restricted-project
+  authorization as the underlying decisions. Operational risk comes only from stored
+  lifecycle, approval, execution, and outcome state. Portfolio exports exclude raw
+  source text, action descriptions, reviewer details, and secure tokens.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification
