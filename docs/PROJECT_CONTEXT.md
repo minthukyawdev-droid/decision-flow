@@ -126,7 +126,13 @@ backend.
   processing state, creator, and optional project route. List views expose only a
   short content preview; full source is available from the authorized detail API.
   Editors can correct metadata, route, dismiss, retry, or delete items, while viewers
-  are read-only. AI candidate detection and inbox review UI remain later phases.
+  are read-only.
+- Detect zero, one, or multiple ordered decision candidates from each inbox source with
+  the user's selected AI model. Every persisted candidate cites exact character spans in
+  the stored meeting content; unsupported candidates are rejected. Reruns replace prior
+  output, provider failures clear stale output, and edits to detection inputs invalidate
+  results. Detection does not use a fabricated fallback. Human candidate review and
+  conversion into governed decisions remain a later phase.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
