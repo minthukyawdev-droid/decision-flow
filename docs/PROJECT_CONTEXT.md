@@ -121,6 +121,12 @@ backend.
 - Projects can be workspace-wide or restricted to selected workspace members.
   Restricted project decisions inherit the project visibility boundary, while
   workspace viewers remain read-only even when selected.
+- Persist incoming meeting notes and transcripts in a private Decision Inbox before
+  they become decisions. Each item records its source, participants, meeting time,
+  processing state, creator, and optional project route. List views expose only a
+  short content preview; full source is available from the authorized detail API.
+  Editors can correct metadata, route, dismiss, retry, or delete items, while viewers
+  are read-only. AI candidate detection and inbox review UI remain later phases.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
@@ -255,6 +261,10 @@ backend.
   authorization as the underlying decisions. Operational risk comes only from stored
   lifecycle, approval, execution, and outcome state. Portfolio exports exclude raw
   source text, action descriptions, reviewer details, and secure tokens.
+- Decision Inbox records inherit active-workspace and restricted-project visibility.
+  They remain mutable intake records outside finalized decision content, and their raw
+  source and participant data are never published through activity or public reports.
+  Archived projects retain existing routes but cannot receive new inbox items.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification
