@@ -20,14 +20,22 @@ administrators may moderate any comment. Finalized decisions continue to accept 
 without modifying their snapshot, while archived decisions expose discussion read-only.
 
 Record generic add/remove history and workspace activity events, but never copy comment
-bodies into activity metadata, public reports, or finalized snapshots. A later threaded
-discussion feature can extend these records without changing this boundary.
+bodies into activity metadata, public reports, or finalized snapshots.
 Allow a comment to target the overall decision, a reviewed option, persisted criterion,
 reviewed or recommendation risk, or the current recommendation. Publish valid targets from
 the backend and require comment creation to use one of those server-issued references. Persist a
 display-label snapshot with the comment so an existing discussion stays understandable if a
 draft field is later renamed; reject stale references for new comments. After finalization,
 derive targets from the immutable snapshot rather than mutable live fields.
+
+Treat every top-level comment as a discussion thread. Replies reference exactly one root,
+inherit its saved field context, and cannot themselves receive nested replies. Editors may
+resolve or reopen a root; resolved threads retain all content but reject new replies until
+reopened. Record resolution transitions in decision history and safe workspace activity.
+Routine replies do not create broadcast activity, while verified mentions inside a reply
+retain recipient-scoped notification behavior. An author may delete an unreplied root or
+their own reply, but only an owner or administrator may delete a root after another person
+has contributed replies.
 
 ## Alternatives considered
 
@@ -39,6 +47,10 @@ derive targets from the immutable snapshot rather than mutable live fields.
   be limited to the author and administrative roles.
 - Let the browser construct arbitrary field links. Rejected because it would permit stale or
   fabricated references and make finalized comment context difficult to audit.
+- Allow unbounded reply nesting. Rejected because a single root with ordered replies keeps
+  field context, moderation, and resolution state understandable.
+- Broadcast activity for every reply. Rejected because normal conversation would overwhelm
+  the workspace feed; explicit mentions remain the targeted attention mechanism.
 
 ## Consequences
 
@@ -48,3 +60,6 @@ deleted comment body is not recoverable through the comment API, although the au
 activity records retain that a deletion occurred. Archived decisions preserve discussion
 as read-only history. Server-issued field targets add one read endpoint and preserve a label
 snapshot, but keep context links deterministic and independently verifiable.
+Thread resolution provides an explicit open/closed workflow without deleting discussion or
+changing finalized content. Protecting contributed replies means a member may need an
+administrator to remove an entire thread after teammates have participated.

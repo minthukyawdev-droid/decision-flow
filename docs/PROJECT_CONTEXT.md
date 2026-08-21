@@ -94,6 +94,9 @@ backend.
   recommendation and filtered by that saved context. Editors can select verified
   teammates who can access the decision as exact mentions; those teammates receive
   recipient-only activity notifications without comment text or email addresses.
+  Each top-level comment forms a thread with ordered replies. Editors can resolve a
+  thread to close it to new replies and reopen it when more discussion is needed;
+  resolution changes are audited without changing finalized decision content.
 - Use the frontend Projects workspace to create, rename, archive, and restore
   projects, review project-level decision counts, and open assigned decisions.
   New and existing decisions can be assigned to a project or kept unassigned,
@@ -222,7 +225,9 @@ backend.
   are published and validated by the backend; stale or fabricated field references
   cannot be attached. Mention identities are selected from an access-filtered backend
   candidate list and revalidated when posted, so restricted-project membership cannot
-  be bypassed by a fabricated user ID.
+  be bypassed by a fabricated user ID. Replies inherit the root thread's validated
+  field context. Resolved threads preserve their history and reject replies until
+  reopened; a member cannot delete a root after another teammate has replied.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification
