@@ -1,6 +1,6 @@
 # DecisionFlow project context
 
-Last verified against the working tree: 2026-08-13.
+Last verified against the working tree: 2026-08-21.
 
 ## Product
 
@@ -97,6 +97,17 @@ backend.
   Each top-level comment forms a thread with ordered replies. Editors can resolve a
   thread to close it to new replies and reopen it when more discussion is needed;
   resolution changes are audited without changing finalized decision content.
+- Turn a finalized decision into accountable execution actions with a title,
+  description, access-valid workspace owner, due date, priority, status, and a
+  required blocker explanation. The decision record shows deterministic progress,
+  blocked, due-soon, and overdue state while keeping these mutable operational
+  records outside the immutable finalization snapshot.
+- Give each user a My Work workspace that combines their visible assigned actions,
+  pending approvals, owned outcome reviews, and direct discussion mentions. Filters
+  narrow the queue by responsibility type, urgency, project, and action priority.
+- Create recipient-only activity notifications when an action is assigned, due soon,
+  or overdue. The hourly production automation uses persisted notification state and
+  PostgreSQL row locks to make overlapping or repeated runs idempotent.
 - Use the frontend Projects workspace to create, rename, archive, and restore
   projects, review project-level decision counts, and open assigned decisions.
   New and existing decisions can be assigned to a project or kept unassigned,
@@ -228,6 +239,12 @@ backend.
   be bypassed by a fabricated user ID. Replies inherit the root thread's validated
   field context. Resolved threads preserve their history and reject replies until
   reopened; a member cannot delete a root after another teammate has replied.
+- Decision execution actions inherit the parent decision's active-workspace and
+  restricted-project authorization. Only active non-viewer members who can open the
+  decision may be assigned. Actions remain mutable follow-up records outside finalized
+  content, become read-only with an archived decision, and are removed with the parent
+  decision. Assignment and deadline activity is recipient-scoped and never exposes the
+  action description.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification
