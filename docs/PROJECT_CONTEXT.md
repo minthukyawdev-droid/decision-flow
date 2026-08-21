@@ -131,8 +131,13 @@ backend.
   the user's selected AI model. Every persisted candidate cites exact character spans in
   the stored meeting content; unsupported candidates are rejected. Reruns replace prior
   output, provider failures clear stale output, and edits to detection inputs invalidate
-  results. Detection does not use a fabricated fallback. Human candidate review and
-  conversion into governed decisions remain a later phase.
+  results. Detection does not use a fabricated fallback.
+- Review those grounded candidates in the frontend Decision Inbox. Workspace editors can
+  explicitly dismiss and restore candidates or promote one into an idempotently created
+  draft decision after reviewing its title and description. The draft retains the meeting
+  source, starts with the detected question and known stakeholders, and inherits the inbox
+  item's project access. Promoted candidate lineage cannot be silently replaced by an AI
+  rerun or detection-input edit; viewers can inspect the same review state read-only.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
