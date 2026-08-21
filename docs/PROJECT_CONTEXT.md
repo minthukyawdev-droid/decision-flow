@@ -138,6 +138,11 @@ backend.
   source, starts with the detected question and known stakeholders, and inherits the inbox
   item's project access. Promoted candidate lineage cannot be silently replaced by an AI
   rerun or detection-input edit; viewers can inspect the same review state read-only.
+- Connect external meeting tools to the Decision Inbox with workspace-scoped credentials
+  managed only by owners and administrators. Raw connector tokens are shown once and stored
+  only as hashes; rotation invalidates the previous token and revocation preserves imported
+  history. Imports inherit the connector's active project route and are idempotent for a
+  stable provider ID, while conflicting content under the same ID is rejected.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
@@ -276,6 +281,10 @@ backend.
   They remain mutable intake records outside finalized decision content, and their raw
   source and participant data are never published through activity or public reports.
   Archived projects retain existing routes but cannot receive new inbox items.
+- Decision Inbox connector credentials grant write-only import access, never workspace read
+  access. Tokens are high-entropy and hash-only at rest. Owner/admin management, immediate
+  rotation, revocation, connector-scoped external IDs, and payload fingerprints prevent
+  credential disclosure, duplicate retries, and silent source replacement.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification
