@@ -225,6 +225,9 @@ backend.
 - Manual production deployment is a fallback, not the normal release path.
 - Production backend assets target EC2, Docker Compose, Nginx, PostgreSQL,
   Alembic migrations, health/readiness checks, systemd automation, and backups.
+- Protected Fathom OAuth application credentials flow from the backend repository's GitHub
+  `production` environment to the EC2 backend environment over verified SSH during deployment;
+  deployment verifies configuration without printing credential values.
 - Separate systemd timers run workflow notifications hourly and the persisted Decision
   Inbox detection queue every minute.
 - Decision Inbox administrators can distinguish a healthy, running, delayed, or not-yet-seen
