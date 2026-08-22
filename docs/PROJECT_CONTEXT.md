@@ -165,7 +165,10 @@ backend.
   recording transcript separately, and persists provider-bound, recording-ID-idempotent inbox
   records. Imports inherit the connection's project route and auto-detection preference;
   unavailable transcripts are skipped and expired tokens rotate only through encrypted backend
-  storage. Signed webhook ingestion remains a subsequent integration stage.
+  storage. Owners and administrators can separately opt a connection into automatic import. A
+  five-minute AWS timer selects the least-recently checked accounts, follows one persisted Fathom
+  cursor page per cycle, and isolates sanitized connection failures; automatic source ingestion
+  remains independent from automatic AI decision detection.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
@@ -233,7 +236,8 @@ backend.
   `production` environment to the EC2 backend environment over verified SSH during deployment;
   deployment verifies configuration without printing credential values.
 - Separate systemd timers run workflow notifications hourly and the persisted Decision
-  Inbox detection queue every minute.
+  Inbox detection queue every minute. A third timer checks opted-in Fathom connections for new
+  meeting pages every five minutes.
 - Decision Inbox administrators can distinguish a healthy, running, delayed, or not-yet-seen
   detection worker without server access and recover exhausted queue items from the product UI.
 - Frontend deployment is documented for Vercel.

@@ -47,5 +47,5 @@ new access token and rotated refresh token through the encrypted credential vaul
   recovery workflows as connector imports.
 - Disconnecting Fathom removes credentials but preserves imported meeting history; deleting the
   connection reference uses `SET NULL` semantics.
-- The manual sync is intentionally bounded and does not replace a future incremental webhook or
-  scheduled pagination workflow.
+- The manual sync remains intentionally bounded; automatic pagination uses the same provider-bound
+  import path without changing manual request latency.
