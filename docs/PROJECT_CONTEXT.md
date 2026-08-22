@@ -143,6 +143,11 @@ backend.
   only as hashes; rotation invalidates the previous token and revocation preserves imported
   history. Imports inherit the connector's active project route and are idempotent for a
   stable provider ID, while conflicting content under the same ID is rejected.
+- Automatically queue grounded decision detection for connected imports by default. Queue
+  state, attempts, and retry time are persisted and visible; a minute-level EC2 worker uses
+  PostgreSQL row locks, processing leases, and exponential backoff to recover safely from
+  temporary AI-provider failures. Connector administrators can keep future imports in
+  manual detection mode, and invalid or exhausted items stop for human attention.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
@@ -206,6 +211,8 @@ backend.
 - Manual production deployment is a fallback, not the normal release path.
 - Production backend assets target EC2, Docker Compose, Nginx, PostgreSQL,
   Alembic migrations, health/readiness checks, systemd automation, and backups.
+- Separate systemd timers run workflow notifications hourly and the persisted Decision
+  Inbox detection queue every minute.
 - Frontend deployment is documented for Vercel.
 
 ## Key invariants
@@ -285,6 +292,9 @@ backend.
   access. Tokens are high-entropy and hash-only at rest. Owner/admin management, immediate
   rotation, revocation, connector-scoped external IDs, and payload fingerprints prevent
   credential disclosure, duplicate retries, and silent source replacement.
+- Decision Inbox automation persists claims before AI calls, retries only temporary provider
+  failures, reclaims expired processing leases, and never weakens exact-span grounding or the
+  human promotion gate.
 - SQLite is for automated tests; PostgreSQL is the runtime database.
 
 ## Local development and verification
