@@ -24,6 +24,13 @@ serializers may reveal only whether credentials are configured, never plaintext 
 Disconnecting a provider account deletes its credential row while retaining sanitized connection
 history.
 
+Begin authorization through an authenticated workspace-admin endpoint. A signed state binds the
+provider connection, workspace, initiating user, purpose, and expiry; persist only its nonce hash.
+The unauthenticated provider callback must match and consume that state before server-side code
+exchange, making copied and replayed callbacks unusable. Return only sanitized result codes to the
+frontend. Every workspace connects a customer-owned Fathom account, so Fathom plan eligibility
+and billing remain between that customer and Fathom.
+
 ## Alternatives considered
 
 - Reuse hashed generic connector tokens. Rejected because outbound provider API calls require a
@@ -42,4 +49,4 @@ history.
   re-encryption.
 - Production must preserve `PROVIDER_CREDENTIAL_ENCRYPTION_KEYS`; losing every old key makes the
   corresponding provider credentials unrecoverable and requires reconnection.
-- OAuth activation and provider-specific synchronization build on this boundary in later parts.
+- Provider-specific synchronization and signed webhook ingestion build on this boundary later.

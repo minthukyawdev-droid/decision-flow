@@ -155,10 +155,13 @@ backend.
   and permits a later incident to alert again.
 - Prepare workspace-scoped native meeting-provider accounts independently from generic
   write-only connectors. Owners and administrators can manage Fathom connection metadata,
-  project routing, and disconnect state. OAuth credentials occupy an isolated table, are
+  project routing, and disconnect state, then authorize the workspace's own Fathom account.
+  Authorization uses a signed, short-lived, one-time state whose hash is persisted before
+  redirect; the callback consumes it before server-side code exchange and returns only a
+  sanitized result to the browser. OAuth credentials occupy an isolated table, are
   Fernet-encrypted before persistence with rotation-aware backend keys, never enter API
-  responses, and are destroyed when the local connection is disconnected. OAuth activation,
-  provider sync, and signed webhook ingestion remain subsequent integration stages.
+  responses, and are destroyed when the local connection is disconnected. Provider meeting
+  sync and signed webhook ingestion remain subsequent integration stages.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
