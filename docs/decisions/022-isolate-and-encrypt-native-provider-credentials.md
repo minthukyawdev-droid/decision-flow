@@ -52,4 +52,5 @@ and billing remain between that customer and Fathom.
 - Provider application credentials are backend deployment secrets. GitHub's protected production
   environment sends them to EC2 through standard input over verified SSH, updates the protected
   environment file atomically, and verifies only their configured state after restart.
-- Provider-specific synchronization and signed webhook ingestion build on this boundary later.
+- Provider-specific synchronization builds on this boundary; signed webhook ingestion remains
+  a later extension.

@@ -161,7 +161,11 @@ backend.
   sanitized result to the browser. OAuth credentials occupy an isolated table, are
   Fernet-encrypted before persistence with rotation-aware backend keys, never enter API
   responses, and are destroyed when the local connection is disconnected. Provider meeting
-  sync and signed webhook ingestion remain subsequent integration stages.
+  sync imports up to 10 recent accessible Fathom meetings on demand, retrieves each OAuth
+  recording transcript separately, and persists provider-bound, recording-ID-idempotent inbox
+  records. Imports inherit the connection's project route and auto-detection preference;
+  unavailable transcripts are skipped and expired tokens rotate only through encrypted backend
+  storage. Signed webhook ingestion remains a subsequent integration stage.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
