@@ -1,6 +1,6 @@
 # DecisionFlow project context
 
-Last verified against the working tree: 2026-08-21.
+Last verified against the working tree: 2026-08-22.
 
 ## Product
 
@@ -153,6 +153,12 @@ backend.
   queue and atomically requeue individual or visible failed items. Three consecutive connector
   failures create one recipient-only, sanitized activity alert; a successful run resets health
   and permits a later incident to alert again.
+- Prepare workspace-scoped native meeting-provider accounts independently from generic
+  write-only connectors. Owners and administrators can manage Fathom connection metadata,
+  project routing, and disconnect state. OAuth credentials occupy an isolated table, are
+  Fernet-encrypted before persistence with rotation-aware backend keys, never enter API
+  responses, and are destroyed when the local connection is disconnected. OAuth activation,
+  provider sync, and signed webhook ingestion remain subsequent integration stages.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
@@ -227,6 +233,10 @@ backend.
 - Backend responses use the shared `{ success, message, data }` envelope; error
   responses may also include `details`.
 - Provider keys and secrets never cross into frontend responses.
+- Native meeting-provider OAuth credentials are encrypted with a dedicated backend key ring,
+  stored separately from connection metadata, and deleted on disconnect. The API exposes only
+  whether credentials exist; generic import tokens and native provider accounts remain separate
+  security principals.
 - Finalization requires an explicit selected option.
 - Finalized content is immutable.
 - Authenticated decision access is constrained to the user's active workspace.
