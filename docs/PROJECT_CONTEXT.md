@@ -148,6 +148,11 @@ backend.
   PostgreSQL row locks, processing leases, and exponential backoff to recover safely from
   temporary AI-provider failures. Connector administrators can keep future imports in
   manual detection mode, and invalid or exhausted items stop for human attention.
+- Monitor that queue through a persisted worker heartbeat and per-connector success/failure
+  health. Workspace owners and administrators can inspect a content-sanitized terminal-failure
+  queue and atomically requeue individual or visible failed items. Three consecutive connector
+  failures create one recipient-only, sanitized activity alert; a successful run resets health
+  and permits a later incident to alert again.
 - Paste or upload UTF-8 text/Markdown transcripts.
 - Extract structured decision information through the backend AI service.
 - Review and persist topic, options, criteria, stakeholders, risks, and action
@@ -213,6 +218,8 @@ backend.
   Alembic migrations, health/readiness checks, systemd automation, and backups.
 - Separate systemd timers run workflow notifications hourly and the persisted Decision
   Inbox detection queue every minute.
+- Decision Inbox administrators can distinguish a healthy, running, delayed, or not-yet-seen
+  detection worker without server access and recover exhausted queue items from the product UI.
 - Frontend deployment is documented for Vercel.
 
 ## Key invariants
